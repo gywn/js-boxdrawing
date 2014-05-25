@@ -1,140 +1,91 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <meta charset='utf-8'>
-  <title>Unicode Box Drawing Script</title>
-  <style>
-    .style-selection {
-      float: left;
-    }
-    .arrow-key-selection {
-      float: left;
-      margin-left: 1em;
-    }
-    textarea {
-      width: 100%;
-      margin-bottom: 1em;
-    }
-    #content {
-      max-width: 50em;
-      padding: 1px 2em 4em 2em;
-      margin: 0 auto;
-      background: #d0d8f0;
-    }
-    body, html {
-      margin: 1em;
-      padding: 0;
-      background: #f0f0ff;
-    }
-  </style>
+    <meta charset='utf-8'>
+    <title>Menlo Box Drawing</title>
+    <style>
+        body {
+            font-family: Corbel, Arial, sans-serif;
+            margin : 0;
+        }
+        .selected-mode, .selected-heart, .selected-arrow {
+            background: yellow;
+        }
+        #content>* {
+            margin: 20px;
+        }
+        #debug {
+            font-family: Menlo;
+        }
+        .options span {
+            padding: .4em .7em;
+            border-radius: 5px;
+        }
+        #mode-erase.selected-mode {
+            background: #FF9999;
+        }
+        #thearea {
+            display: block;
+            font-family: "Menlo",monospace;
+            font-size:   13px;
+            font-style: italic;
+/*            width: 800px;*/
+            outline : none;  /* overwrite browser's default */
+            padding: 1em;
+            -webkit-transition: background-color .2s, border-color .2s, color .2s
+        }
+        #thearea.arrow {
+            background-color: #FFFFEE;
+        }
+        #thearea.draw {
+            border: 1px solid black;
+            background-color: #F2F2F2;
+        }
+        #thearea.erase {
+            color: #CC0000;
+            border-color: #CC0000;
+            background-color: #FFEEEE;
+        }
+        #content {}
+        .clear {clear: both;}
+    </style>
 </head>
 <body>
 <div id='content'>
-  <h1>Javascript Box Drawing Demo</h1>
-  <p>This a demo for the <a
-    href='http://github.com/MarkLodato/js-boxdrawing'>js-boxdrawing</a>
-  library.  Turn on the drawing feature by selecting a style other than "Off".
-  Then, with the cursor in the text area below, press the arrow keys (plus any
-  modifers selected) to produce Unicode box drawing characters.
-  <div id="form">
-  <textarea id='thearea' rows='20' cols='80'></textarea>
-  <form name="boxdrawing">
-    <div class="style-selection">
-      Style (CTRL-B):<br>
-      <input type="radio" value="" name="style" id="style-off" checked><label
-        for="style-off"> Off</label><br>
-      <input type="radio" value="r" name="style" id="style-regular"><label
-        for="style-regular"> Regular</label><br>
-      <input type="radio" value="b" name="style" id="style-bold"><label
-        for="style-bold"> Bold</label><br>
-      <input type="radio" value="d" name="style" id="style-double"><label
-        for="style-double"> Double</label><br>
-      <!--
-      <input type="radio" value="h" name="style" id="style-dashed"><label
-        for="style-dashed"> Dashed</label> (Not Implemented)<br>
-      <input type="radio" value="t" name="style" id="style-dotted"><label
-        for="style-dotted"> Dotted</label> (Not Implemented)<br>
-      -->
-      <input type="radio" value="_" name="style" id="style-space"><label
-        for="style-space"> Erase</label>
+    <h1>Menlo Box Drawing</h1>
+    <div id='debug'></div>
+    <div class='options' id='mode-options'>
+        <span id='mode-regular'>Regular</span>
+        <span id='mode-bold'>Bold</span>
+        <span id='mode-double'>Double</span>
+        <span id='mode-erase'>Erase</span>
+        <span id='mode-nothing'>Nothing</span>
     </div>
-    <div class="arrow-key-selection">
-      Arrow Key +<br>
-      <input type="checkbox" value="alt" name="arrowkey" id="arrowkey-alt"
-        ><label for="arrowkey-alt"> Alt</label><br>
-      <input type="checkbox" value="ctrl" name="arrowkey" id="arrowkey-ctrl"
-        ><label for="arrowkey-ctrl"> Ctrl</label><br>
-      <input type="checkbox" value="shift" name="arrowkey" id="arrowkey-shift"
-        ><label for="arrowkey-shift"> Shift</label>
+    <div class='options' id='heart-options'>
+        <span id='heart-plain'>Plain</span>
+        <span id='heart-round'>Round</span>
+        <span id='heart-dashed'>Dashed</span>
+        <div class='clear'></div>
     </div>
-    <div style="clear: both;"></div>
-  </form>
-  </div>
+    <div class='options' id='arrow-options'>
+        <span id='arrow-yes'>Arrow</span>
+        <span id='arrow-no'>No Arrow</span>
+        <div class='clear'></div>
+    </div>
+    <textarea id='thearea' rows='32' cols='128'>───────────────────┐
+                   │
+                   │
+                   │
+                   │
+                   ╵</textarea>
 </div>
-  <script src='jquery-1.4.4.min.js'></script>
-  <script src='boxdrawing.js' charset='utf-8'></script>
-  <script type='text/javascript'>
-    $(document).ready(function() {
-      $('textarea').keydown(function (evt) {
-        if (evt.keyCode < 37 || evt.keyCode > 40)
-          return;
-        var i;
-        var form = document.forms['boxdrawing'];
-
-        var group = form.elements['style'];
-        var style = "";
-        for (i = 0; i < group.length; i++) {
-          if (group[i].checked) {
-            style = group[i].value;
-            break;
-          }
-        }
-
-        if (style) {
-          group = form.elements['arrowkey'];
-          for (i = 0; i < group.length; i++) {
-            var checked = !!group[i].checked;
-            switch (group[i].value) {
-              case "alt":
-                if (checked ^ !!evt.altKey)
-                  return;
-                break;
-              case "ctrl":
-                if (checked ^ !!evt.ctrlKey)
-                  return;
-                break;
-              case "shift":
-                if (checked ^ !!evt.shiftKey)
-                  return;
-                break;
-            }
-          }
-          var direction = evt.keyCode - 37;
-          DrawBox(evt.target, style, direction);
-          return false;
-        }
-      });
-      $('textarea').keydown(function (evt) {
-        if (!evt.ctrlKey || evt.which != 66 /* B */)
-          return;
-        var form = document.forms['boxdrawing'];
-        var group = form.elements['style'];
-        var checked = -1;
-        for (i = 0; i < group.length; i++) {
-          if (group[i].checked) {
-            checked = i;
-            break;
-          }
-        }
-        if (checked < 0 || checked >= group.length-1) {
-          checked = 0;
-        } else {
-          checked++;
-        }
-        group[checked].checked = true;
-        return false;
-      });
-    });
-  </script>
+<script src='jquery-1.4.4.min.js'></script>
+<script src='caret.js'></script>
+<script src='keys.js'></script>
+<script src='ui.js'></script>
+<script src='history.js'></script>
+<script src='draw.js'></script>
+<script src='draw.data.js' charset='utf-8'c></script>
+<script src='init.js'></script>
 </body>
 </html>
