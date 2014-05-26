@@ -1,27 +1,25 @@
 var History = History ? History : {};
 
 (function(ht,cr){
-    ht.states = {}
-    
-    
+    var states = {}
 
-    ht.states.update = function(state) {
-        ht.states.stack.unshift(state)
+    states.update = function(state) {
+        states.stack.unshift(state)
         if (window.localStorage) {
-            window.localStorage.setItem("history", JSON.stringify(ht.states.current()))
+            window.localStorage.setItem("history", JSON.stringify(states.current()))
         }   
     }
 
-    ht.states.current = function() {
-        var state = ht.states.stack[0]
+    states.current = function() {
+        var state = states.stack[0]
         return state ? state : false
     }
 
-    ht.states.deleteCurrent = function() {
-        var last = ht.states.stack.shift()
+    states.deleteCurrent = function() {
+        var last = states.stack.shift()
         if (window.localStorage) 
             window.localStorage.setItem('history', JSON.stringify(last))
-        return ht.states.current()
+        return states.current()
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -44,16 +42,15 @@ var History = History ? History : {};
             }
         }
         if (stack) {
-            ht.states.stack = stack
+            states.stack = stack
             return true
         } else {
-            ht.states.stack = []
+            states.stack = []
             return false
         }
     }
 
     ht.record = function(elem, overwrite) {
-        var states = ht.states
         var text = elem.value
 
         //  overwrite: overwrite the most recent state
@@ -63,7 +60,6 @@ var History = History ? History : {};
     }
 
     ht.resume = function(elem) {
-        var states = ht.states
         if (states.current()) {
             elem.value = states.current().text
             cr.setCaret(elem, states.current().caret)      
@@ -71,7 +67,6 @@ var History = History ? History : {};
     }
 
     ht.rewind = function(elem) {
-        var states = ht.states
         var text = elem.value
         while (states.current() && states.current().text == text)
             states.deleteCurrent()

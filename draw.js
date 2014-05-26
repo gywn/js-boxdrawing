@@ -34,23 +34,29 @@ var Draw = Draw ? Draw : {};
     //      update "elem" with 
     //        + its beginning/ending caret (cr.getCaret)  
     //        + direction (0|1|2|3) 
+    //        + config : it depends
     // 
     ////////////////////////////////////////////////////////////////////
 
     dw.move = function(elem, direction)
     {
+        var config = {}
         var caret = cr.getCaret(elem);
     
-        //  Condition that Draw ignores caret movement:
+        //  Condition that "move" ignores caret movement:
         //    - null selection or selection longer than 1
         //    - multiple lines selection (even select only a "\n")
-        //    - caret wants to move left/upper out of textarea
     
         if (caret.start.row != caret.end.row || 
-            caret.start.col != caret.end.col - 1 ||
-            caret.start.col == 0 && direction == 0 ||
-            caret.start.row == 0 && direction == 1)
-            return true;
+                caret.start.col != caret.end.col - 1)
+            return true
+            
+        //  Condition that "move" forbid care movement
+        //    - caret wants to move left/upper out of textarea
+        
+        if (caret.start.col == 0 && direction == 0 ||
+                caret.start.row == 0 && direction == 1)
+            return false;
         
         //  Decide position of two carets
     
@@ -61,10 +67,10 @@ var Draw = Draw ? Draw : {};
         //  Method Logic 
     
         var opposite = [2,3,0,1]
-        var current_glyph = best_glyph(elem, caret.start, direction)
+        var current_glyph = best_glyph(elem, caret.start, direction, dw.style.val)
         var current_opposite_end = getEnd(current_glyph, opposite[direction])
         var current_arrow = Draw.BestArrow[opposite[direction]][Draw.style.val]
-        var next_glyph = best_glyph(elem, next_caret.start, opposite[direction])
+        var next_glyph = best_glyph(elem, next_caret.start, opposite[direction], dw.style.val)
 
         if (dw.arrow.val == dw.ARROW && current_opposite_end == dw.style.val) {
             cr.set(elem, caret.start, current_arrow)    // only update current postion
@@ -85,7 +91,7 @@ var Draw = Draw ? Draw : {};
         var arr = dw.GlyphEndType[glyph]
         return arr ? parseInt(arr[edge]) : dw.BLANK
     }
-
+    
     ////////////////////////////////////////////////////////////////////
     //  
     //      Find new glyph matching boundary condition
@@ -95,14 +101,14 @@ var Draw = Draw ? Draw : {};
     // 
     ////////////////////////////////////////////////////////////////////
 
-    var best_glyph = function(elem, caret, fixed_edge) {
+    var best_glyph = function(elem, caret, fixed_edge, style) {
         var row = caret.row
         var col = caret.col
         var opposite = [2,3,0,1]
         var edge_to_match = []
         
         for (var i = 0; i < 4; i++)
-            edge_to_match[i] = fixed_edge == i ? dw.style.val : getEnd(cr.get(elem,cr.side(caret,i)),opposite[i])
+            edge_to_match[i] = fixed_edge == i ? style : getEnd(cr.get(elem,cr.side(caret,i)),opposite[i])
             
         var s = dw.StyleCount
         var h = dw.HeartCount
@@ -112,6 +118,40 @@ var Draw = Draw ? Draw : {};
         ]
         
         return glyph ? glyph : ' '
+    }
+
+    ////////////////////////////////////////////////////////////////////
+    //  
+    //      Use BLANK to overwrite character before caret
+    // 
+    ////////////////////////////////////////////////////////////////////
+    
+    dw.backspace = function(elem) {
+        var caret = cr.getCaret(elem);
+        
+        ////////////////////////////////////////////////////////////////
+        //  
+        //    - multiline selection : let browser do the delection
+        //    - null selection      : backspace previous character
+        //    - same line selection : clear every character in that region 
+        // 
+        ////////////////////////////////////////////////////////////////
+    
+        if (caret.start.row != caret.end.row)
+            return true
+        else if (caret.start.col != 0 && caret.start.col == caret.end.col)
+            caret.start = cr.side(caret.start, 0)
+            
+        var r = caret.start
+        while (r.col < caret.end.col) {
+            cr.set(elem, r, ' ')
+            r = cr.side(r, 2)
+        }
+        
+        caret.end = caret.start
+        cr.setCaret(elem, caret)
+        
+        return false
     }
 
     ////////////////////////////////////////////////////////////////////

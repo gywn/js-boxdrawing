@@ -1,10 +1,28 @@
+////////////////////////////////////////////////////////////////////////
+//                         
+//      ╭─────────╮        
+//      │ Control ├───────╮ 
+//      ╰─┬───────╯       │ 
+//        │               │ 
+//        ⍒  UI.x         │   - the correct transparencity of background
+//      ╭───────────────╮ ⍒     is crucial
+//      │ ┏━━━━━━━━━━━━━┿━┓   - Since UI.t must be above UI.x (for editing),
+//      │ ┃      UI.t   ┊ ┃     all background styling should be applied to UI.x 
+//      │ ┃             ┊ ┃
+//      │ ┃             ┊ ┃
+//      ╰─╂┄┄┄┄┄┄┄┄┄┄┄┄┄┘ ┃
+//        ┗━━━━━━━━━━━━━━━┛
+//
+////////////////////////////////////////////////////////////////////////
+                                                                        
+
+
+
 var UI = UI ? UI : {};
 
 (function(ui){
 
     ui.t = {};
-
-    ui.t.updateStyle = function(){};
 
     ////////////////////////////////////////////////////////////////////
     // 
@@ -72,7 +90,7 @@ var UI = UI ? UI : {};
                 ctrl.addClass("selected-" + group_name)
             
                 ui.t[group_name] = ctrl.attr("t")
-                ui.t.updateStyle()              // implementation of updateStyle can be overwritten
+                $.isFunction(ui.updateStyle) && ui.updateStyle()    // implementation of updateStyle can be overwritten
                 ui.t.focus()
             })
         }

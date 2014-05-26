@@ -1,16 +1,17 @@
 $(document).ready(function() {
     
     UI.t = $('#thearea')
-    
-    UI.t.updateStyle = function() {
+        
+    UI.updateStyle = function() {
+        var scenery = $("#t-wrapper")
         if (UI.t.mode == 'erase')
-            UI.t.attr('class', 'erase')
+            scenery.attr('class', 'erase')
         else if (UI.t.mode == 'nothing')
-            UI.t.attr('class','')
+            scenery.attr('class','')
         else if (UI.t.arrow == 'yes')
-            UI.t.attr('class', 'arrow')
+            scenery.attr('class', 'arrow')
         else
-            UI.t.attr('class', 'draw')
+            scenery.attr('class', 'draw')
     };
     
     UI.groupInit('mode','mode',Draw.style,{
@@ -38,35 +39,40 @@ $(document).ready(function() {
     
     History.init() && History.resume(UI.t[0])
     
+    UI.t.attr('spellcheck','false')
+    
+    //  Enable Shadow
+    
+    UI.t.before($("<div id='shadow-wrapper'><textarea id='shadow'></textarea></div>"))
+    var x = $('#shadow')
+    Shadow.init(x[0])
+    x.attr('spellcheck','false')
+    
     //  Listen to keydown of #thearea
     
     UI.t.keydown(function(evt) {
+        
+        // $("#debug").html(evt.which)
         
         //  Save state 
            
         History.record(UI.t[0])
         
+        //  Caret moving
+        if (Keys.equal(evt, Keys.DIR) || Keys.equal(evt, Keys.SHIFT_DIR)) {
+            // $('#debug').html(JSON.stringify(evt.which))
+            Draw.extendArea(UI.t[0], evt.which - 37)
+        }
+        
         //  Draw character
 
-        var rel = [
-           {key: Keys.SHIFT_LEFT,   direction: 0,     draw: true},
-           {key: Keys.SHIFT_UP,     direction: 1,       draw: true},
-           {key: Keys.SHIFT_RIGHT,  direction: 2,    draw: true},
-           {key: Keys.SHIFT_DOWN,   direction: 3,     draw: true},
-           {key: Keys.LEFT,         direction: 0},
-           {key: Keys.UP,           direction: 1},
-           {key: Keys.RIGHT,        direction: 2},
-           {key: Keys.DOWN,         direction: 3},
-        ]
-
-        for (var i = 0; i < rel.length; i++) {
-            if (Keys.equal(evt, rel[i].key)) {
-                Draw.extendArea(UI.t[0], rel[i].direction)
-                History.record(UI.t[0], true)
-                //   if Drawbox.draw succeed, thant block event propagation.
-                if (rel[i].draw && Draw.style.val != Draw.NOTHING)
-                    return Draw.move(UI.t[0], rel[i].direction)                 
-            }
+        if (Keys.equal(evt, Keys.SHIFT_DIR) && Draw.style.val != Draw.NOTHING)
+            return Draw.move(UI.t[0], evt.which - 37)                 
+        
+        // Backspacing
+        
+        if (Keys.equal(evt, Keys.BACKSPACE) && Draw.style.val != Draw.NOTHING) {
+            return Draw.backspace(UI.t[0])
         }
         
         //  Switch arrow
@@ -84,12 +90,22 @@ $(document).ready(function() {
         
         if (Keys.equal(evt, Keys.META_Z))
             return History.rewind(UI.t[0])
+            
+        //  Dream region 
+        
+        if ((Keys.equal(evt, Keys.NON_FUNC) || Keys.equal(evt, Keys.META_V)) && Draw.style.val != Draw.NOTHING)
+            Shadow.dream(UI.t[0])
         
         return true
     });
     
+    UI.t.keyup(function(evt){
+        //  UI.t is dream, and shadow is reality...
+        Shadow.wake(UI.t[0])
+    })
+        
     $(window).unload(function(evt){
         History.record(UI.t[0])                 // save the last state (to localStorage) on unloading
-    })
+    });
     
 });

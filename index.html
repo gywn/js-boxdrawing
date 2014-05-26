@@ -8,43 +8,56 @@
             font-family: Corbel, Arial, sans-serif;
             margin : 0;
         }
-        .selected-mode, .selected-heart, .selected-arrow {
+        .options span.selected-mode, 
+        .options span.selected-heart,
+        .options span.selected-arrow {
             background: yellow;
         }
-        #content>* {
-            margin: 20px;
-        }
+        #content>* {margin:20px;}
         #debug {
             font-family: Menlo;
         }
         .options span {
             padding: .4em .7em;
             border-radius: 5px;
+            background: #EEEEEE;
         }
         #mode-erase.selected-mode {
             background: #FF9999;
         }
-        #thearea {
+        #thearea, #shadow {
             display: block;
-            font-family: "Menlo",monospace;
-            font-size:   13px;
-            font-style: italic;
-/*            width: 800px;*/
-            outline : none;  /* overwrite browser's default */
+            box-sizing: border-box;
+            margin: 0;
             padding: 1em;
-            -webkit-transition: background-color .2s, border-color .2s, color .2s
+            width: 100%;
+            height: 400px;
+            font-family: "Menlo",monospace;
+            font-size:   12px;
+            line-height: 16px;
+            font-style: italic;
+            background: transparent;
+            border : 0px solid black;
+            outline : none;  /* overwrite browser's default */
         }
-        #thearea.arrow {
+        #shadow-wrapper {
+            height: 0px;
+            overflow: true;
+        }
+        #t-wrapper.arrow {
+            border: 1px solid black;
             background-color: #FFFFEE;
         }
-        #thearea.draw {
+        #t-wrapper.draw {
             border: 1px solid black;
             background-color: #F2F2F2;
         }
+        #t-wrapper.erase {
+            border: 1px solid #CC0000;
+            background-color: #FFEEEE;
+        }
         #thearea.erase {
             color: #CC0000;
-            border-color: #CC0000;
-            background-color: #FFEEEE;
         }
         #content {}
         .clear {clear: both;}
@@ -72,12 +85,10 @@
         <span id='arrow-no'>No Arrow</span>
         <div class='clear'></div>
     </div>
-    <textarea id='thearea' rows='32' cols='128'>───────────────────┐
-                   │
-                   │
-                   │
-                   │
-                   ╵</textarea>
+    <div>
+    <div id='t-wrapper'>
+        <textarea id='thearea' contenteditable="true"></textarea></div>
+    </div>
 </div>
 <script src='jquery-1.4.4.min.js'></script>
 <script src='caret.js'></script>
@@ -86,6 +97,7 @@
 <script src='history.js'></script>
 <script src='draw.js'></script>
 <script src='draw.data.js' charset='utf-8'c></script>
+<script src='shadow.js'></script>
 <script src='init.js'></script>
 </body>
 </html>

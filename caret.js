@@ -100,7 +100,7 @@ var Caret = Caret ? Caret : {};
         var locate = function(offset) {
             return {
                 row : (text.substr(0, offset).match(/\n/g) || []).length,
-                col : offset - 1 - text.lastIndexOf("\n", offset - 1)
+                col : offset - 1 - text.substr(0,offset).lastIndexOf("\n")
             }
         }
         return {start: locate(offset.start), end : locate(offset.end)}
@@ -109,6 +109,7 @@ var Caret = Caret ? Caret : {};
 
 
     //  caret should have caret.(start|end).(row|col) methods
+    //  caret.start should be before caret.end
 
     cr.setCaret = function(elem, caret) {
         var text = elem.value;
