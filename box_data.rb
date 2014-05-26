@@ -263,7 +263,7 @@ print("Draw.GlyphEndType = {\n")
 i = 0
 Glyphs.each{|glyph,end_left,end_up,end_right,end_down,hrt|
 
-  printf("'%s'\:'%s%s%s%s%s',",glyph,end_left,end_up,end_right,end_down,hrt)
+  printf("'%s'\:'%s%s%s%s',",glyph,end_left,end_up,end_right,end_down)
 
   #   break line if too long
 

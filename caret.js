@@ -1,6 +1,21 @@
 var Caret = Caret ? Caret : {};
 
 (function(cr){
+    
+    ////////////////////////////////////////////////////////////////////
+    //
+    //      return the next caret in direction d
+    // 
+    //  caret   : {row:, col:}
+    //
+    ////////////////////////////////////////////////////////////////////
+    
+    cr.side = function(caret, d) {
+        var shift = [
+            [0,-1], [-1,0], [0,1], [1,0]
+        ]
+        return {row: caret.row + shift[d][0], col: caret.col + shift[d][1]}
+    }
 
     ////////////////////////////////////////////////////////////////////
     // 

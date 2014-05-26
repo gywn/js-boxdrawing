@@ -1,12 +1,6 @@
 var Draw = Draw ? Draw : {};
 
 (function(dw,cr,ui){
-    // Directions
-
-    dw.LEFT = 0;
-    dw.UP = 1;
-    dw.RIGHT = 2;
-    dw.DOWN = 3;
 
     // Style constants
 
@@ -54,31 +48,21 @@ var Draw = Draw ? Draw : {};
     
         if (caret.start.row != caret.end.row || 
             caret.start.col != caret.end.col - 1 ||
-            caret.start.col == 0 && direction == dw.LEFT ||
-            caret.start.row == 0 && direction == dw.UP)
+            caret.start.col == 0 && direction == 0 ||
+            caret.start.row == 0 && direction == 1)
             return true;
         
         //  Decide position of two carets
     
-        var shift = [
-            {row:0,col:-1}, {row:-1,col:0},
-            {row:0,col:1}, {row:1,col:0}
-        ]
-        var next_caret = {start:{},end:{}}
-        next_caret.start.row = caret.start.row + shift[direction].row
-        next_caret.start.col = caret.start.col + shift[direction].col
-        next_caret.end.row = caret.end.row + shift[direction].row
-        next_caret.end.col = caret.end.col + shift[direction].col
-    
+        var next_caret = {}
+        next_caret.start = cr.side(caret.start, direction)
+        next_caret.end = cr.side(caret.end, direction)
+        
         //  Method Logic 
     
-        var opposite = [dw.RIGHT,dw.DOWN,dw.LEFT,dw.UP]
+        var opposite = [2,3,0,1]
         var current_glyph = best_glyph(elem, caret.start, direction)
-        var current_opposite_end = (function(glyph, end){
-            var arr = dw.GlyphEndType[glyph]
-            arr = arr ? arr : [dw.BLANK, dw.BLANK, dw.BLANK, dw.BLANK]
-            return arr[end]
-        })(current_glyph, opposite[direction])
+        var current_opposite_end = getEnd(current_glyph, opposite[direction])
         var current_arrow = Draw.BestArrow[opposite[direction]][Draw.style.val]
         var next_glyph = best_glyph(elem, next_caret.start, opposite[direction])
 
@@ -94,6 +78,13 @@ var Draw = Draw ? Draw : {};
     
         return false
     };
+    
+    //  Get end types frome glyph
+    
+    var getEnd = function(glyph, edge){
+        var arr = dw.GlyphEndType[glyph]
+        return arr ? parseInt(arr[edge]) : dw.BLANK
+    }
 
     ////////////////////////////////////////////////////////////////////
     //  
@@ -107,24 +98,19 @@ var Draw = Draw ? Draw : {};
     var best_glyph = function(elem, caret, fixed_edge) {
         var row = caret.row
         var col = caret.col
-
-        var getEnd = function(r,c,edge) {      // edge = 0:left, 1:up, 2:right, 3:down
-            var arr = dw.GlyphEndType[cr.get(elem,{row:r,col:c})]
-            arr = arr ? arr : [dw.BLANK, dw.BLANK, dw.BLANK, dw.BLANK]
-            return parseInt(arr[edge])
-        }
-
-        var edge_left = fixed_edge == 0 ? dw.style.val : getEnd(row,col-1,2)
-        var edge_up = fixed_edge == 1 ? dw.style.val : getEnd(row-1,col,3)
-        var edge_right = fixed_edge == 2 ? dw.style.val : getEnd(row,col+1,0)
-        var edge_down = fixed_edge == 3 ? dw.style.val : getEnd(row+1,col,1)
-    
+        var opposite = [2,3,0,1]
+        var edge_to_match = []
+        
+        for (var i = 0; i < 4; i++)
+            edge_to_match[i] = fixed_edge == i ? dw.style.val : getEnd(cr.get(elem,cr.side(caret,i)),opposite[i])
+            
         var s = dw.StyleCount
         var h = dw.HeartCount
         var glyph = dw.BestGlyph[
-            4 * Math.pow(s,4) * dw.heart.val + Math.pow(s,4) * fixed_edge + Math.pow(s,3) * edge_left
-            + Math.pow(s,2) * edge_up + s * edge_right + edge_down
+            4 * Math.pow(s,4) * dw.heart.val + Math.pow(s,4) * fixed_edge + Math.pow(s,3) * edge_to_match[0]
+            + Math.pow(s,2) * edge_to_match[1] + s * edge_to_match[2] + edge_to_match[3]
         ]
+        
         return glyph ? glyph : ' '
     }
 
@@ -140,19 +126,13 @@ var Draw = Draw ? Draw : {};
     
         //  Decide position of two carets
         
-        var shift = [
-            {row:0,col:-1}, {row:-1,col:0},
-            {row:0,col:1}, {row:1,col:0}
-        ]
-        var next_caret = {start:{},end:{}}
-        next_caret.start.row = caret.start.row + shift[direction].row
-        next_caret.start.col = caret.start.col + shift[direction].col
-        next_caret.end.row = caret.end.row + shift[direction].row
-        next_caret.end.col = caret.end.col + shift[direction].col
+        var next_caret = {}
+        next_caret.start = cr.side(caret.start, direction)
+        next_caret.end = cr.side(caret.end, direction)
 
         //  enlarge selection even outside of region
         //    - browser only move caret.end
     
-        cr.set(elem, {row:next_caret.end.row, col:next_caret.end.col}, ' ', true)
+        cr.set(elem, next_caret.end, ' ', true)
     }
 })(Draw, Caret, UI);

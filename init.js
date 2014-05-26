@@ -49,14 +49,14 @@ $(document).ready(function() {
         //  Draw character
 
         var rel = [
-           {key: Keys.SHIFT_LEFT,   direction: Draw.LEFT,     draw: true},
-           {key: Keys.SHIFT_UP,     direction: Draw.UP,       draw: true},
-           {key: Keys.SHIFT_RIGHT,  direction: Draw.RIGHT,    draw: true},
-           {key: Keys.SHIFT_DOWN,   direction: Draw.DOWN,     draw: true},
-           {key: Keys.LEFT,         direction: Draw.LEFT},
-           {key: Keys.UP,           direction: Draw.UP},
-           {key: Keys.RIGHT,        direction: Draw.RIGHT},
-           {key: Keys.DOWN,         direction: Draw.DOWN},
+           {key: Keys.SHIFT_LEFT,   direction: 0,     draw: true},
+           {key: Keys.SHIFT_UP,     direction: 1,       draw: true},
+           {key: Keys.SHIFT_RIGHT,  direction: 2,    draw: true},
+           {key: Keys.SHIFT_DOWN,   direction: 3,     draw: true},
+           {key: Keys.LEFT,         direction: 0},
+           {key: Keys.UP,           direction: 1},
+           {key: Keys.RIGHT,        direction: 2},
+           {key: Keys.DOWN,         direction: 3},
         ]
 
         for (var i = 0; i < rel.length; i++) {
