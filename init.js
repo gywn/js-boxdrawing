@@ -43,10 +43,10 @@ $(document).ready(function() {
     
     //  Enable Shadow
     
-    UI.t.before($("<div id='shadow-wrapper'><textarea id='shadow'></textarea></div>"))
-    var x = $('#shadow')
-    Shadow.init(x[0])
-    x.attr('spellcheck','false')
+    UI.t.before($("<div id='shadow-wrapper'><textarea id='shadow' style='overflow:hidden'></textarea></div>"))
+    var xanadu = $('#shadow')
+    Shadow.init(xanadu)
+    xanadu.attr('spellcheck','false')
     
     //  Listen to keydown of #thearea
     

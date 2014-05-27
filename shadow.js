@@ -28,7 +28,7 @@ var Shadow = Shadow ? Shadow : {};
     
     sw.init = function(x) {
         xanadu = x
-        x.value = ''
+        x.val('')
     }
     
     ////////////////////////////////////////////////////////////////////
@@ -46,7 +46,8 @@ var Shadow = Shadow ? Shadow : {};
             for (var i = 0; i < lines.length; i++)
                 lines[i] = Array(lines[i].length + 1).join(space)
             
-            xanadu.value = text
+            xanadu.val(text)
+            xanadu.scrollTop(elem.scrollTop)
             
             elem.value = lines.join('\n')
             cr.setCaret(elem, caret)
@@ -68,12 +69,12 @@ var Shadow = Shadow ? Shadow : {};
             var caret = cr.getCaret(elem)
             
             elem.value = merge(
-                xanadu.value.split("\n"),
+                xanadu.val().split("\n"),
                 elem.value.split("\n")
             ).join("\n")
             cr.setCaret(elem, caret)
             
-            xanadu.value = ''
+            xanadu.val('')
             
             dreaming = false
         }
