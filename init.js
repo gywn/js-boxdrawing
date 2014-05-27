@@ -39,20 +39,18 @@ $(document).ready(function() {
     
     History.init() && History.resume(UI.t[0])
     
-    UI.t.attr('spellcheck','false')
+    UI.t.attr('spellcheck',false)
     
     //  Enable Shadow
     
     UI.t.before($("<div id='shadow-wrapper'><textarea id='shadow' style='overflow:hidden'></textarea></div>"))
     var xanadu = $('#shadow')
     Shadow.init(xanadu)
-    xanadu.attr('spellcheck','false')
+    xanadu.attr('spellcheck',false)
     
     //  Listen to keydown of #thearea
     
     UI.t.keydown(function(evt) {
-        
-        // $("#debug").html(evt.which)
         
         //  Save state 
            

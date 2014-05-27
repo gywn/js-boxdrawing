@@ -127,7 +127,7 @@ var Caret = Caret ? Caret : {};
 
         //  Set selection's position with two offsets
 
-        elem.focus();
+        // elem.focus();
 
         if ('selectionStart' in elem) {
             elem.selectionStart = start;
