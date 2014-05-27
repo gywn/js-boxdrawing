@@ -34,8 +34,23 @@ var Caret = Caret ? Caret : {};
         var l = lines[row] ? lines[row] : ''
         return row < 0 || row >= lines.length || col < 0 || col >= l.length ? ' ' : l[col]
     };
+    
+    ////////////////////////////////////////////////////////////////////
+    // 
+    //      type    : - undefined : write character & reset caret
+    //                - "enlarge" : doesn't write character (but enlarge space) & reset caret
+    //                - "no focus": write character & doesn't reset caret
+    // 
+    //    - everything outside of textflow is space
+    //    - set() should handle
+    //        + space/newline padding issue
+    // 
+    ////////////////////////////////////////////////////////////////////
 
-    cr.set = function(elem, caret, chr, enlarge) { // enlarge: don't overwrite content
+    cr.ENLARGE = 0
+    cr.NO_FOCUS = 1
+
+    cr.set = function(elem, caret, chr, type) { // enlarge: don't overwrite content
         var row = caret.row
         var col = caret.col
         var lines = elem.value.split('\n');
@@ -47,13 +62,13 @@ var Caret = Caret ? Caret : {};
         var l = lines[row];
         if (col >= l.length)
             l += Array(col - l.length + 2).join(' ');
-        lines[row] = enlarge ? l : l.substring(0,col) + chr[0] + l.substring(col+1);
+        lines[row] = type == cr.ENLARGE ? l : l.substring(0,col) + chr[0] + l.substring(col+1);
     
         //  renew text content maintaining the same caret positon
     
         var caret = cr.getCaret(elem)
         elem.value = lines.join("\n")
-        cr.setCaret(elem, caret)
+        if (type != cr.NO_FOCUS) cr.setCaret(elem, caret)
     
         return chr
     };

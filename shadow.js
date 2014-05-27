@@ -48,6 +48,7 @@ var Shadow = Shadow ? Shadow : {};
             
             xanadu.val(text)
             xanadu.scrollTop(elem.scrollTop)
+            xanadu.scrollLeft(elem.scrollLeft)
             
             elem.value = lines.join('\n')
             cr.setCaret(elem, caret)

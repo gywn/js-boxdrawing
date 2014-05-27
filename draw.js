@@ -165,7 +165,7 @@ var Draw = Draw ? Draw : {};
         var caret = cr.getCaret(elem);
     
         //  Decide position of two carets
-        
+    
         var next_caret = {}
         next_caret.start = cr.side(caret.start, direction)
         next_caret.end = cr.side(caret.end, direction)
@@ -173,6 +173,6 @@ var Draw = Draw ? Draw : {};
         //  enlarge selection even outside of region
         //    - browser only move caret.end
     
-        cr.set(elem, next_caret.end, ' ', true)
+        cr.set(elem, next_caret.end, ' ', cr.ENLARGE)
     }
 })(Draw, Caret, UI);
