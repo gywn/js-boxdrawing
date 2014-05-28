@@ -1,6 +1,7 @@
 $(document).ready(function() {
     
     UI.t = $('#thearea')
+    UI.x = $('#shadow')
         
     UI.updateStyle = function() {
         var scenery = $("#t-wrapper")
@@ -40,13 +41,11 @@ $(document).ready(function() {
     History.init() && History.resume(UI.t[0])
     
     UI.t.attr('spellcheck',false)
-    
+    UI.x.attr('spellcheck',false)
+        
     //  Enable Shadow
     
-    UI.t.before($("<div id='shadow-wrapper'><textarea id='shadow' style='overflow:hidden'></textarea></div>"))
-    var xanadu = $('#shadow')
-    Shadow.init(xanadu)
-    xanadu.attr('spellcheck',false)
+    Shadow.init(UI.x)
     
     //  Listen to keydown of #thearea
     
@@ -57,10 +56,8 @@ $(document).ready(function() {
         History.record(UI.t[0])
         
         //  Caret moving
-        if (Keys.equal(evt, Keys.DIR) || Keys.equal(evt, Keys.SHIFT_DIR)) {
-            // $('#debug').html(JSON.stringify(evt.which))
+        if (Keys.equal(evt, Keys.DIR) || Keys.equal(evt, Keys.SHIFT_DIR))
             Draw.extendArea(UI.t[0], evt.which - 37)
-        }
         
         //  Draw character
 
@@ -73,10 +70,30 @@ $(document).ready(function() {
             return Draw.backspace(UI.t[0])
         }
         
+        //  Highline continuous zone
+        
+        if (Keys.equal(evt, Keys.META_SHIFT)) {
+            // $('#debug').html(JSON.stringify((new Date()).getTime()))
+            Drag.remember(UI.t[0],[16,91])
+            Drag.move(UI.t[0], 4, UI.x)
+        }
+        
+        //  Move continuous zone
+        if (Keys.equal(evt, Keys.META_SHIFT_DIR)) {
+            return Drag.move(UI.t[0], evt.which - 37, UI.x)
+        }
+        
+        //  Delete continuous zone
+        
+        if (Keys.equal(evt, Keys.META_SHIFT_BS)) {
+            Drag.unhighlight(UI.x)
+            return Drag.move(UI.t[0], -1)       // no more highlight
+        }
+        
         //  Switch arrow
         
         if (Keys.equal(evt, Keys.ALT)) UI.arrow.next.click()
-        
+    
         //  Switch mode (style/end_type)
         
         if (Keys.equal(evt, Keys.TAB)) {
@@ -97,9 +114,10 @@ $(document).ready(function() {
         return true
     });
     
-    UI.t.keyup(function(evt){
-        //  UI.t is dream, and shadow is reality...
-        Shadow.wake(UI.t[0])
+    UI.t.keyup(function(evt){        
+        Shadow.wake(UI.t[0])    
+        Drag.releaseFuncKey(evt.which)
+        Drag.unhighlight(UI.x)
     })
         
     $(window).unload(function(evt){

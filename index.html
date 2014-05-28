@@ -44,6 +44,9 @@
             height: 0px;
             overflow: true;
         }
+        #shadow.highlight {
+            color: yellow;
+        }
         #t-wrapper {
             border-radius: 5px;
             border: 1px solid #999999;
@@ -93,6 +96,7 @@
     </div>
     <div>
     <div id='t-wrapper'>
+        <div id='shadow-wrapper'><textarea id='shadow' style='overflow:hidden;-webkit-user-select: none;'></textarea></div>
         <textarea id='thearea'></textarea></div>
     </div>
 </div>
@@ -104,6 +108,7 @@
 <script src='draw.js'></script>
 <script src='draw.data.js' charset='utf-8'c></script>
 <script src='shadow.js'></script>
+<script src='drag.js'></script>
 <script src='init.js'></script>
 </body>
 </html>

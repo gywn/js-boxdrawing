@@ -19,10 +19,14 @@ var Keys = Keys ? Keys : {};
     
     ky.DIR =         {which: direction, metaKey: false, shiftKey: false, ctrlKey:false, altKey:false}
     ky.SHIFT_DIR =   {which: direction, metaKey: false, shiftKey: true,  ctrlKey:false, altKey:false}
-    ky.META_DIR =    {which: direction, metaKey: true, shiftKey: false,  ctrlKey:false, altKey:false}
+    ky.META_SHIFT_DIR =    
+                    {which: direction, metaKey: true, shiftKey: true,  ctrlKey:false, altKey:false}
+    ky.META_SHIFT_BS =    
+                    {which: 8, metaKey: true, shiftKey: true,  ctrlKey:false, altKey:false}
     ky.ALT =          {which: 18, metaKey: false, shiftKey: false, ctrlKey:false, altKey:true}
     // ky.CTRL =         {which: 17, metaKey: false, shiftKey: false, ctrlKey:false, altKey:true}
     ky.TAB =          {which: 9,  metaKey: false, shiftKey: false, ctrlKey:false, altKey:false}
+    ky.META_SHIFT =   {metaKey: true,  shiftKey: true, ctrlKey:false, altKey:false}
     ky.META_Z =       {which: 90, metaKey: true,  shiftKey: false, ctrlKey:false, altKey:false}
     ky.META_V =       {which: 86, metaKey: true,  shiftKey: false, ctrlKey:false, altKey:false}
     ky.BACKSPACE =    {which: 8, metaKey: false,  shiftKey: false, ctrlKey:false, altKey:false}

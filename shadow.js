@@ -95,7 +95,7 @@ var Shadow = Shadow ? Shadow : {};
             //  If line is changed
                 
             if (! dm.match(new RegExp("^" + space + "*$"))) {
-                var new_line = Array(rl.length)
+                var new_line = Array(rl.length) // packed array -> fast
                 for (var j = 0; j < rl.length; j++)
                     new_line[j] = dm[j] && dm[j] != space ? dm[j] : rl[j]
                 rl = new_line.join('')

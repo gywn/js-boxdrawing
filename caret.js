@@ -2,6 +2,32 @@ var Caret = Caret ? Caret : {};
 
 (function(cr){
     
+    var valid = function(v){return v != undefined}
+    
+    var set_val = function(elem, val) {
+        if (valid(elem.val)) {
+            elem.val(val)
+        } else if (valid(elem.value)) {
+            elem.value = val
+        } else if (valid(elem.textContent)) {
+            elem.textContent = val
+        } else 
+            return false
+            
+        return true
+    }
+    
+    var get_val = function(elem) {
+        if (valid(elem.val)) {
+            return elem.val()
+        } else if (valid(elem.value)) {
+            return elem.value
+        } else if (valid(elem.textContent)) {
+            return elem.textContent
+        } else 
+            return null            
+    }
+    
     ////////////////////////////////////////////////////////////////////
     //
     //      return the next caret in direction d
@@ -12,7 +38,7 @@ var Caret = Caret ? Caret : {};
     
     cr.side = function(caret, d) {
         var shift = [
-            [0,-1], [-1,0], [0,1], [1,0]
+            [0,-1], [-1,0], [0,1], [1,0], [0,0]
         ]
         return {row: caret.row + shift[d][0], col: caret.col + shift[d][1]}
     }
@@ -30,7 +56,7 @@ var Caret = Caret ? Caret : {};
     cr.get = function(elem, caret) {
         var row = caret.row
         var col = caret.col
-        var lines = elem.value.split('\n');
+        var lines = get_val(elem).split('\n');
         var l = lines[row] ? lines[row] : ''
         return row < 0 || row >= lines.length || col < 0 || col >= l.length ? ' ' : l[col]
     };
@@ -53,7 +79,7 @@ var Caret = Caret ? Caret : {};
     cr.set = function(elem, caret, chr, type) { // enlarge: don't overwrite content
         var row = caret.row
         var col = caret.col
-        var lines = elem.value.split('\n');
+        var lines = get_val(elem).split('\n');
         if (row < 0 || col < 0)
             return;
         while (row >= lines.length)
@@ -67,7 +93,7 @@ var Caret = Caret ? Caret : {};
         //  renew text content maintaining the same caret positon
     
         var caret = cr.getCaret(elem)
-        elem.value = lines.join("\n")
+        set_val(elem, lines.join("\n"))
         if (type != cr.NO_FOCUS) cr.setCaret(elem, caret)
     
         return chr
@@ -111,7 +137,7 @@ var Caret = Caret ? Caret : {};
         //  Convert offsets to {row,column}
         //    - syntax: result.(start|end).(row|col)
     
-        var text = elem.value
+        var text = get_val(elem)
         var locate = function(offset) {
             return {
                 row : (text.substr(0, offset).match(/\n/g) || []).length,
@@ -127,7 +153,7 @@ var Caret = Caret ? Caret : {};
     //  caret.start should be before caret.end
 
     cr.setCaret = function(elem, caret) {
-        var text = elem.value;
+        var text = get_val(elem);
         var lines = text.split('\n');
     
         //  Convert {row,column} to offsets
