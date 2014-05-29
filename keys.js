@@ -29,6 +29,7 @@ var Keys = Keys ? Keys : {};
     ky.META_SHIFT =   {metaKey: true,  shiftKey: true, ctrlKey:false, altKey:false}
     ky.META_Z =       {which: 90, metaKey: true,  shiftKey: false, ctrlKey:false, altKey:false}
     ky.META_V =       {which: 86, metaKey: true,  shiftKey: false, ctrlKey:false, altKey:false}
+    ky.META_SHIFT_Z = {which: 90, metaKey: true,  shiftKey: true, ctrlKey:false, altKey:false}
     ky.BACKSPACE =    {which: 8, metaKey: false,  shiftKey: false, ctrlKey:false, altKey:false}
     // ky.DELETE =       {which: 46, metaKey: false,  shiftKey: false, ctrlKey:false, altKey:false}
     ky.NON_FUNC =     {which: non_functional, metaKey: false, ctrlKey:false, altKey:false}

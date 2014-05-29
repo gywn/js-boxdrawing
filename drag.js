@@ -100,7 +100,7 @@ var Drag = Drag ? Drag : {};
     
     var polygone = function(elem) {
         var current_caret = cr.getCaret(elem).start
-        var orig_lines = elem.value.split('\n') // lines is [str,str, ...]
+        var orig_lines = elem.val().split('\n') // lines is [str,str, ...]
         var poly_lines = []                     // lines would by [[char|null|undefined, ...], ...]
         var LEFT_CHAR = 'L'
         var RIGHT_CHAR = 'R'
@@ -200,7 +200,7 @@ var Drag = Drag ? Drag : {};
         keys && keys.forEach(function(k){func_key[k] = true})
         if (released) {
             orig_caret = cr.getCaret(elem).start
-            orig_lines = elem.value.split('\n')
+            orig_lines = elem.val().split('\n')
             poly_lines = polygone(elem)
             
             released = false
@@ -208,8 +208,10 @@ var Drag = Drag ? Drag : {};
     }
     
     dg.releaseFuncKey = function(key) {
-        delete func_key[key]
-        if ($.isEmptyObject(func_key)) released = true
+        if (func_key[key]) {                    // release of one functional key is enough
+            func_key = {}
+            released = true
+        }
 
     }
     
@@ -335,7 +337,7 @@ var Drag = Drag ? Drag : {};
             del, ' '
         )
         
-        elem.value = new_lines.join('\n')
+        elem.val(new_lines.join('\n'))
         cr.setCaret(elem,{start:cr.side(caret.start,direction),end:cr.side(caret.end,direction)})
         
         //  Highlighting
@@ -348,8 +350,8 @@ var Drag = Drag ? Drag : {};
             )
             xanadu.val(highlight_lines.join('\n'))
             xanadu.addClass('highlight')
-            xanadu.scrollTop(elem.scrollTop)
-            xanadu.scrollLeft(elem.scrollLeft)
+            xanadu.scrollTop(elem.scrollTop())
+            xanadu.scrollLeft(elem.scrollLeft())
     
             highlight = true
         }

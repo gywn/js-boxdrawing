@@ -111,15 +111,17 @@ var Caret = Caret ? Caret : {};
     ////////////////////////////////////////////////////////////////////
 
     cr.getCaret = function(elem) {
-    
+        
         //  Get two caret' offset
+        
+        var el = elem instanceof jQuery ? elem[0] : elem
     
         var offset = {};
-        if ('selectionStart' in elem) {
-            offset = {start:elem.selectionStart, end:elem.selectionEnd};
+        if ('selectionStart' in el) {
+            offset = {start:el.selectionStart, end:el.selectionEnd};
         }
         else if ('selection' in document) {
-            var val = elem.value.replace(/\r\n/g, "\n");
+            var val = el.value.replace(/\r\n/g, "\n");
     
             var range = document.selection.createRange().duplicate();
             range.moveEnd("character", val.length);
@@ -153,6 +155,7 @@ var Caret = Caret ? Caret : {};
     //  caret.start should be before caret.end
 
     cr.setCaret = function(elem, caret) {
+        
         var text = get_val(elem);
         var lines = text.split('\n');
     
@@ -170,13 +173,15 @@ var Caret = Caret ? Caret : {};
 
         // elem.focus();
 
-        if ('selectionStart' in elem) {
-            elem.selectionStart = start;
-            elem.selectionEnd = end;
+        var el = elem instanceof jQuery ? elem[0] : elem
+        
+        if ('selectionStart' in el) {
+            el.selectionStart = start;
+            el.selectionEnd = end;
         }
         else if ('selection' in document) {
             text = text.replace(/\r\n/g, "\n");
-            var range = elem.createTextRange();
+            var range = el.createTextRange();
             range.collapse(true);
             range.moveStart("character", start);
             range.moveEnd("character", end - start);

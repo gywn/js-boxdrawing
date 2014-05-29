@@ -38,7 +38,7 @@ $(document).ready(function() {
     UI.heart.ctrl('round').click()
     UI.arrow.ctrl('no').click()
     
-    History.init() && History.resume(UI.t[0])
+    History.init() && History.resume(UI.t)
     
     UI.t.attr('spellcheck',false)
     UI.x.attr('spellcheck',false)
@@ -53,46 +53,63 @@ $(document).ready(function() {
         
         //  Save state 
            
-        History.record(UI.t[0])
+        
         
         //  Caret moving
-        if (Keys.equal(evt, Keys.DIR) || Keys.equal(evt, Keys.SHIFT_DIR))
-            Draw.extendArea(UI.t[0], evt.which - 37)
-        
-        //  Draw character
+        if (Keys.equal(evt, Keys.DIR) || Keys.equal(evt, Keys.SHIFT_DIR)) {
+            Draw.extendArea(UI.t, evt.which - 37)
+            
+            //  Draw character
 
-        if (Keys.equal(evt, Keys.SHIFT_DIR) && Draw.style.val != Draw.NOTHING)
-            return Draw.move(UI.t[0], evt.which - 37)                 
+            if (Keys.equal(evt, Keys.SHIFT_DIR) && Draw.style.val != Draw.NOTHING)
+                return Draw.move(UI.t, evt.which - 37)   
+                
+            return true
+        }              
         
         // Backspacing
         
         if (Keys.equal(evt, Keys.BACKSPACE) && Draw.style.val != Draw.NOTHING) {
-            return Draw.backspace(UI.t[0])
+            return Draw.backspace(UI.t)
         }
         
         //  Highline continuous zone
         
         if (Keys.equal(evt, Keys.META_SHIFT)) {
             // $('#debug').html(JSON.stringify((new Date()).getTime()))
-            Drag.remember(UI.t[0],[16,91])
-            Drag.move(UI.t[0], 4, UI.x)
+            Drag.remember(UI.t, [16, 91])       // keyCode for META + SHIFT
+            Drag.move(UI.t, 4, UI.x)
+            
+            //  Move continuous zone
+            
+            if (Keys.equal(evt, Keys.META_SHIFT_DIR)) {
+                return Drag.move(UI.t, evt.which - 37, UI.x)
+            }
+        
+            //  Delete continuous zone
+        
+            if (Keys.equal(evt, Keys.META_SHIFT_BS)) {
+                Drag.unhighlight(UI.x)
+                return Drag.move(UI.t, -1)       // no more highlight
+            }
+            
+            //  Redo
+            
+            if (Keys.equal(evt, Keys.META_SHIFT_Z)) {
+                Drag.unhighlight(UI.x)
+                return History.redo(UI.t)
+            }
+            
+            
+            return true
         }
-        
-        //  Move continuous zone
-        if (Keys.equal(evt, Keys.META_SHIFT_DIR)) {
-            return Drag.move(UI.t[0], evt.which - 37, UI.x)
-        }
-        
-        //  Delete continuous zone
-        
-        if (Keys.equal(evt, Keys.META_SHIFT_BS)) {
-            Drag.unhighlight(UI.x)
-            return Drag.move(UI.t[0], -1)       // no more highlight
-        }
-        
+                
         //  Switch arrow
         
-        if (Keys.equal(evt, Keys.ALT)) UI.arrow.next.click()
+        if (Keys.equal(evt, Keys.ALT)) {
+            UI.arrow.next.click()
+            return true
+        }
     
         //  Switch mode (style/end_type)
         
@@ -104,24 +121,26 @@ $(document).ready(function() {
         //  Undo
         
         if (Keys.equal(evt, Keys.META_Z))
-            return History.rewind(UI.t[0])
+            return History.rewind(UI.t)
             
         //  Dream region 
         
         if ((Keys.equal(evt, Keys.NON_FUNC) || Keys.equal(evt, Keys.META_V)) && Draw.style.val != Draw.NOTHING)
-            Shadow.dream(UI.t[0])
+            Shadow.dream(UI.t)
         
         return true
     });
     
-    UI.t.keyup(function(evt){        
-        Shadow.wake(UI.t[0])    
-        Drag.releaseFuncKey(evt.which)
-        Drag.unhighlight(UI.x)
+    UI.t.keyup(function(evt){     
+        // $("#debug").html((new Date()).getTime())   
+        Shadow.wake(UI.t)                       // Shadow.dream ->
+        Drag.releaseFuncKey(evt.which)          // Drag.move ->
+        Drag.unhighlight(UI.x)                  // Keys.META_SHIFT ->
+        History.record(UI.t)                    
     })
         
     $(window).unload(function(evt){
-        History.record(UI.t[0])                 // save the last state (to localStorage) on unloading
+        History.record(UI.t)                 // save the last state (to localStorage) on unloading
     });
     
 });
