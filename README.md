@@ -54,7 +54,8 @@ FONT = 'Menlo'   # change to 'Courrier'
 
 ## Demo
 
-http://hijack111.github.io/js-boxdrawing/
+- Standard: http://hijack111.github.io/js-boxdrawing/
+- Reduced: http://hijack111.github.io/js-boxdrawing/index.reduced.html
 
 ## Compile from source
 

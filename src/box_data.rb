@@ -339,7 +339,7 @@ JAVASCRIPT
 printf("Draw.BestArrow = [")
 (0..3).each {|direction|
   printf("[")
-  (0..3).each {|end_type|
+  (0..END_TYPE_COUNT - 1).each {|end_type|
     printf("'%s',",best_arrow[direction,end_type])
   }
   print("],")
