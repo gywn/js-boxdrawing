@@ -26,7 +26,7 @@ A simple tool for drawing Unicode box/arrow
 |Regular/Bold/Double| Draw line with [characters](https://en.wikipedia.org/wiki/Box-drawing_character) like ─(U+2500),━(U+2501) or ═(U+2550)|
 |Erase | Draw blank character (U+0020)|
 |Plain/Round/Dashed| Draw line with [characters](https://en.wikipedia.org/wiki/Box-drawing_character) like ┐(U+2510),╮(U+256E) or ┄(U+2550)|
-|Arrow/No Arrow| Draw one arrow character like (_after drawn, the mode is automatically toggled back to No Arrow mode_) |
+|Arrow/No Arrow| Draw one arrow character (_after drawn, the mode is automatically toggled back to No Arrow mode_) |
 
 ## Why Menlo
 
