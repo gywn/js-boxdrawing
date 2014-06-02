@@ -1,6 +1,6 @@
 # Menlo Box Drawing
 
-A simple tool for drawing Unicode box/arrow
+A simple tool for drawing Unicode box/arrow on Mac OS X
 
 ## Usage
 
@@ -51,6 +51,10 @@ in `src/box_data.rb`
 ```RUBY
 FONT = 'Menlo'   # change to 'Courrier' 
 ```
+
+## Demo
+
+http://hijack111.github.io/js-boxdrawing/
 
 ## Compile from source
 
