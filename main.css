@@ -5,7 +5,7 @@ body .options span { padding: .4em .7em; border-radius: 5px; background: #ededed
 body .options span.selected-mode, body .options span.selected-heart, body .options span.selected-arrow { background: #007f00; color: white; }
 body .options span#mode-erase.selected-mode { background: #c10100; }
 body .options span#arrow-yes.selected-arrow { background: #915e00; }
-body #t-wrapper { border-radius: 5px; border: 1px solid transparent; }
+body #t-wrapper { border-radius: 5px; border: 1px solid #404040; }
 body #t-wrapper.arrow { border: 1px solid #915e00; background-color: #fff2db; }
 body #t-wrapper.draw { border: 1px solid #404040; background-color: #ededed; }
 body #t-wrapper.erase { color: #c10100; border: 1px solid #c10100; background-color: #ffdbdb; }

@@ -39,7 +39,7 @@ body {
     }
     #t-wrapper {
         border-radius: 5px;
-        border: 1px solid transparent;
+        border: 1px solid back-ize($background, $green);
         &.arrow {
             border: 1px solid $golden;
             background-color: back-ize($golden, $background);
