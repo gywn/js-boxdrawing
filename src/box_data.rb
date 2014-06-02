@@ -274,7 +274,7 @@ Glyphs.each{|glyph,end_left,end_up,end_right,end_down,hrt|
   end
 
 }
-print("}\n")
+print("};\n")
 
 printf(<<JAVASCRIPT)
 
@@ -317,7 +317,7 @@ i = 0
   end
 
 }}}}}}
-printf("\"\n")
+printf("\";\n")
 
 printf(<<JAVASCRIPT)
 
@@ -344,4 +344,4 @@ printf("Draw.BestArrow = [")
   }
   print("],")
 }
-printf("]\n")
+printf("];\n")

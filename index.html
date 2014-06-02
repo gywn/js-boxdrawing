@@ -3,115 +3,33 @@
 <head>
     <meta charset='utf-8'>
     <title>Menlo Box Drawing</title>
-    <style>
-        body {
-            font-family: Corbel, Arial, sans-serif;
-            margin : 0;
-        }
-        .options span.selected-mode, 
-        .options span.selected-heart,
-        .options span.selected-arrow {
-            background: yellow;
-        }
-        #content>* {margin:20px;}
-        #debug {
-            font-family: Menlo;
-        }
-        .options span {
-            padding: .4em .7em;
-            border-radius: 5px;
-            background: #EDEDED;
-        }
-        #mode-erase.selected-mode {
-            background: #FF9999;
-        }
-        #thearea, #shadow {
-            display: block;
-            box-sizing: border-box;
-            margin: 0;
-            padding: 1em;
-            width: 100%;
-            height: 400px;
-            font-family: "Menlo",monospace;
-            font-size:   12px;
-            line-height: 16px;
-            font-style: italic;
-            background: transparent;
-            border : 0px solid black;
-            outline : none;  /* overwrite browser's default */
-        }
-        #shadow-wrapper {
-            height: 0px;
-            overflow: true;
-        }
-        .erase #shadow.highlight {
-            color: #FFDDCC;
-        }
-        #shadow.highlight {
-            color: yellow;
-        }
-        #t-wrapper {
-            border-radius: 5px;
-            border: 1px solid #999999;
-        }
-        #t-wrapper.arrow {
-            border: 1px solid black;
-            background-color: #FFFFEE;
-        }
-        #t-wrapper.draw {
-            border: 1px solid #CCCCCC;
-            background-color: #EDEDED;
-        }
-        #t-wrapper.erase {
-            color : #CC0000;
-            border: 1px solid #CC0000;
-            background-color: #FFEEEE;
-        }
-        #thearea.erase {
-            color: #CC0000;
-        }
-        textarea {color: inherit;}
-        #content {}
-        .clear {clear: both;}
-    </style>
+    <link rel="stylesheet" type="text/css" href="main.css" title="default" media="screen" />
+    <script src='jquery-1.4.4.min.js'></script>
+    <script src='menlo.min.js'></script>
 </head>
 <body>
-<div id='content'>
-    <h1>Menlo Box Drawing</h1>
-    <div id='debug'></div>
-    <div class='options' id='mode-options'>
-        <span id='mode-regular'>Regular</span>
-        <span id='mode-bold'>Bold</span>
-        <span id='mode-double'>Double</span>
-        <span id='mode-erase'>Erase</span>
-        <span id='mode-nothing'>Nothing</span>
-    </div>
-    <div class='options' id='heart-options'>
-        <span id='heart-plain'>Plain</span>
-        <span id='heart-round'>Round</span>
-        <span id='heart-dashed'>Dashed</span>
-        <div class='clear'></div>
-    </div>
-    <div class='options' id='arrow-options'>
-        <span id='arrow-yes'>Arrow</span>
-        <span id='arrow-no'>No Arrow</span>
-        <div class='clear'></div>
-    </div>
-    <div>
-    <div id='t-wrapper'>
-        <div id='shadow-wrapper'><textarea id='shadow' style='overflow:hidden;-webkit-user-select: none;'></textarea></div>
-        <textarea id='thearea'></textarea></div>
-    </div>
+<h1>Menlo Box Drawing</h1>
+<div id='debug'></div>
+<div class='options' id='mode-options'>
+    <span id='mode-regular'>Regular</span>
+    <span id='mode-bold'>Bold</span>
+    <span id='mode-double'>Double</span>
+    <span id='mode-erase'>Erase</span>
+    <span id='mode-nothing'>Nothing</span>
 </div>
-<script src='jquery-1.4.4.min.js'></script>
-<script src='caret.js'></script>
-<script src='keys.js'></script>
-<script src='ui.js'></script>
-<script src='history.js'></script>
-<script src='draw.js'></script>
-<script src='draw.data.js' charset='utf-8'c></script>
-<script src='shadow.js'></script>
-<script src='drag.js'></script>
-<script src='init.js'></script>
+<div class='options' id='heart-options'>
+    <span id='heart-plain'>Plain</span>
+    <span id='heart-round'>Round</span>
+    <span id='heart-dashed'>Dashed</span>
+</div>
+<div class='options' id='arrow-options'>
+    <span id='arrow-yes'>Arrow</span>
+    <span id='arrow-no'>No Arrow</span>
+</div>
+<div>
+<div id='t-wrapper'>
+    <div id='shadow-wrapper'><textarea id='shadow'></textarea></div>
+    <textarea id='thearea'></textarea></div>
+</div>
 </body>
 </html>

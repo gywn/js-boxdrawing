@@ -359,4 +359,4 @@ var Drag = Drag ? Drag : {};
         return false        
     }
 
-})(Drag,Caret)
+})(Drag,Caret);
