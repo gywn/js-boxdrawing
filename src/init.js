@@ -27,9 +27,16 @@ $(document).ready(function() {
     
     UI.t = $('#thearea')
     UI.x = $('#shadow')
+    
+    var resize = function () {
+        UI.t.height($(window).height() - UI.t.offset().top)
+        UI.x.height($(window).height() - UI.x.offset().top)
+    };
+    
+    resize();
         
     UI.updateStyle = function() {
-        var scenery = $("#t-wrapper")
+        var scenery = $("body")
         if (UI.t.mode == 'erase')
             scenery.attr('class', 'erase')
         else if (UI.t.mode == 'nothing')
@@ -163,6 +170,10 @@ $(document).ready(function() {
         Drag.unhighlight(UI.x)                  // Keys.META_SHIFT ->
         History.record(UI.t)                    
     })
+       
+    $(window).resize(function(){
+        resize();
+    })   
         
     $(window).unload(function(evt){
         History.record(UI.t)                 // save the last state (to localStorage) on unloading
